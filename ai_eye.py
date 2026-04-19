@@ -1071,13 +1071,22 @@ class Controller(NSObject):
 
         def _key_handler(event, self=self):
             try:
-                if event.keyCode() == 6:
-                    print("Z pressed")
+                key = event.keyCode()
 
+                # Z key → voice
+                if key == 6:
                     if self._wv:
                         self._wv.evaluateJavaScript_completionHandler_(
                             "nativeVoiceToggle()", None
                         )
+
+                # X key → screenshot toggle
+                elif key == 7:
+                    if self._wv:
+                        self._wv.evaluateJavaScript_completionHandler_(
+                            "toggleSnap()", None
+                        )
+
             except Exception as e:
                 print("Key error:", e)
 

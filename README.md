@@ -3,7 +3,7 @@
 AI Eye is a macOS AI overlay that lets you chat, code, and give acess to whatever's on screen to personal assistant AI models from one floating panel. Completely Free! and Unlimited! tokan limit, Helpful for studies and coding tasks.
 Can also use ollama AI modals locally but makes PC slow, suggested to use the api-keys.
 
-On other screens, press Z to toggle audio to ask question.
+On other screens, press `z` to toggle audio to ask question. and press `x` to add screenshot.
 
 ## What it does
 
