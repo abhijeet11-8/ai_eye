@@ -1,7 +1,7 @@
 # AI Eye
 
-AI Eye is a macOS menu-bar AI overlay that lets you chat, code, and send screenshots to AI models from one floating panel. Completely Free!, Helpful for studies and coding tasks.
-Can integrate with edge AI's but make sPC slow.
+AI Eye is a macOS AI overlay that lets you chat, code, and give acess to whatever's on screen to personal assistant AI models from one floating panel. Completely Free!, Helpful for studies and coding tasks.
+Can integrate with edge AI's but makes PC slow.
 
 ## What it does
 
@@ -15,19 +15,25 @@ Can integrate with edge AI's but make sPC slow.
 
 - **Groq text**: `llama-3.3-70b-versatile`
 - **Groq vision**: `llama-3.2-11b-vision-instruct`
-- **Gemini**: `gemini-2.0-flash-exp` and optional `gemini-1.5-flash`
+- **Gemini**: `gemini-2.0-flash-exp` and optional `gemini-1.5-flash` (yet not working due to billing issues)
 - **OpenRouter coding**: `deepseek/deepseek-chat`, `amazon/nova-lite-v1`, `mistralai/mistral-7b-instruct:free`, `meta-llama/llama-3.3-70b-instruct:free`
 - **DeepSeek direct**: `deepseek/deepseek-chat`
 - **Ollama local**: `llama3.2-vision`
 
 ## Setup
+Run it in terminal:
+```bash
+cd Desktop
+git pull https://github.com/abhijeet11-8/ai_eye.git
+```
 
 To install automatically (recommended), run the installer script:
 ```bash
 chmod +x ./install.sh
 ```
+here you can download Ollama and any of its local models to run it locally or just type y/n.
 
-For manual installation:
+For model & app setup:
 
 1.  **Install dependencies:**
     `pip install -r requirements.txt`
@@ -53,6 +59,13 @@ For manual installation:
     ```
 3.  **Secure and Edit:**
     `chmod 600 ~/.ai_eye.json && nano ~/.ai_eye.json`
+    Get your api keys from here edit the .ai_eye.json file:
+    [groq](https://console.groq.com/keys)
+    [openrouter](https://openrouter.ai/settings/management-keys)
+    [deepseek](https://platform.deepseek.com/api_keys)
+
+    To edit:
+    `nano ~/.ai_eye.json`
 
 ## Running on macOS
 
