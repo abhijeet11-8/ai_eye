@@ -14,7 +14,7 @@ Can also use ollama AI modals locally but makes PC slow, suggested to use the ap
 
 | Preview Models | Coding Models |
 | :---: | :---: |
-| <img src="https://github.com/user-attachments/assets/822ad824-105e-42f0-89bc-f97804ca132a" width="400"> | <img src="https://github.com/user-attachments/assets/a806224c-8774-48ba-b01c-1082c056e95c" width="400"> |
+| <img src="https://github.com/user-attachments/assets/822ad824-105e-42f0-89bc-f97804ca132a" width="400"> | <img src="https://github.com/user-attachments/assets/868c9025-17c6-4cb5-971c-4ea73cee5080" width="400"> |
 
 
 
