@@ -36,6 +36,10 @@ git pull https://github.com/abhijeet11-8/ai_eye.git
 
 To install automatically (recommended), run the installer script:
 ```bash
+./install.sh
+```
+or,
+```bash
 chmod +x ./install.sh
 ```
 here you can download Ollama and any of its local models to run it locally or just type y/n.
