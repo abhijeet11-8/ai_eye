@@ -50,6 +50,10 @@ For model & app setup:
 
 1.  **Install dependencies:**
     `pip install -r requirements.txt`
+    then,
+    `brew install portaudio`
+    if brew not installed,
+    `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 2.  **Create the config file:**
     ```bash
     cd ai_eye

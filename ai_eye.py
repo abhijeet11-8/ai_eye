@@ -35,9 +35,10 @@ from AppKit import (
     NSButton, NSView,
     NSFont, NSEvent,
     NSWindowCollectionBehaviorCanJoinAllSpaces,
-    NSWindowCollectionBehaviorStationary,
-    NSWindowCollectionBehaviorIgnoresCycle,
+    NSStatusWindowLevel,
+    NSWindowCollectionBehaviorFullScreenAuxiliary,
     NSEventMaskKeyDown,
+    NSScreenSaverWindowLevel
 )
 try:
     from WebKit import WKWebView, WKWebViewConfiguration, WKUserContentController
@@ -49,7 +50,21 @@ _STYLE_PANEL  = 1 | 2 | 8 | 32768 | 128
 _STYLE_BUBBLE = 0                            # borderless
 _LEVEL        = 25                           # NSStatusWindowLevel
 _BEHAV_PANEL  = 1
-_BEHAV_BUBBLE = 1 | 16 | 64
+from AppKit import (
+    NSWindowCollectionBehaviorCanJoinAllSpaces,
+    NSWindowCollectionBehaviorFullScreenAuxiliary,
+    NSWindowCollectionBehaviorStationary,
+    NSWindowCollectionBehaviorTransient,
+    NSWindowCollectionBehaviorIgnoresCycle,
+)
+
+_BEHAV_BUBBLE = (
+    NSWindowCollectionBehaviorCanJoinAllSpaces |
+    NSWindowCollectionBehaviorFullScreenAuxiliary |
+    NSWindowCollectionBehaviorStationary |
+    NSWindowCollectionBehaviorTransient |
+    NSWindowCollectionBehaviorIgnoresCycle
+)
 _VE_MAT       = 7
 _VE_BLD       = 0
 _VE_STA       = 1
@@ -994,7 +1009,15 @@ class BubblePanel(NSObject):
 
     @objc.python_method
     def show(self):
+        self._panel.setLevel_(NSScreenSaverWindowLevel)  # higher than normal windows
+        
+        self._panel.setCollectionBehavior_(
+        NSWindowCollectionBehaviorCanJoinAllSpaces |
+        NSWindowCollectionBehaviorFullScreenAuxiliary |
+        NSWindowCollectionBehaviorStationary
+    )
         self._panel.orderFrontRegardless()
+        self._panel.setHidesOnDeactivate_(False)
 
     @objc.python_method
     def hide(self):
@@ -1030,10 +1053,14 @@ class Controller(NSObject):
         self._build_panel()
 
         fr = self._panel.frame()
-        bx = fr.origin.x + fr.size.width  / 2 - _BUBBLE_W / 2
-        by = fr.origin.y + fr.size.height / 2 - _BUBBLE_H / 2
+        screen = NSScreen.mainScreen().visibleFrame()
+        margin = 16
+
+        x = screen.origin.x + screen.size.width  - _BUBBLE_W - margin
+        y = screen.origin.y + screen.size.height - _BUBBLE_H - margin
+
         self._bubble = BubblePanel.alloc().init()
-        self._bubble.build(self, bx, by)
+        self._bubble.build(self, x, y)
 
         # ── Global Z-key monitor ──────────────────────────────────
         # NSKeyDownMask = 1 << 10 = 1024
@@ -1044,9 +1071,6 @@ class Controller(NSObject):
 
         def _key_handler(event, self=self):
             try:
-                print("KEY:", event.keyCode())  # debug (should ALWAYS print)
-
-                # macOS Z key = 6
                 if event.keyCode() == 6:
                     print("Z pressed")
 
@@ -1166,11 +1190,15 @@ class Controller(NSObject):
     @objc.python_method
     def minimizeToBubble(self):
         self._minimized = True
-        fr = self._panel.frame()
-        bx = fr.origin.x + fr.size.width  / 2 - _BUBBLE_W / 2
-        by = fr.origin.y + fr.size.height / 2 - _BUBBLE_H / 2
+
+        screen = NSScreen.mainScreen().visibleFrame()
+        margin = 20
+
+        x = screen.origin.x + screen.size.width  - _BUBBLE_W - margin - 20
+        y = screen.origin.y + screen.size.height - _BUBBLE_H - margin
+
         self._panel.orderOut_(None)
-        self._bubble.move_to(bx, by)
+        self._bubble.move_to(x, y)
         self._bubble.show()
 
     @objc.python_method
