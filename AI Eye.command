@@ -1,1 +1,0 @@
-/Users/admin/Desktop/ai_eye/Launch AI Eye.command

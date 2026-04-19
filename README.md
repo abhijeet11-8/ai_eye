@@ -3,6 +3,8 @@
 AI Eye is a macOS AI overlay that lets you chat, code, and give acess to whatever's on screen to personal assistant AI models from one floating panel. Completely Free! and Unlimited! tokan limit, Helpful for studies and coding tasks.
 Can also use ollama AI modals locally but makes PC slow, suggested to use the api-keys.
 
+On other screens, press Z to toggle audio to ask question.
+
 ## What it does
 
 - Screenshot questions route to `Groq` vision
@@ -116,6 +118,9 @@ This is the only way past the dialog without a paid Apple Developer certificate.
 - Questions generator
 - Windows support
 - ChatGPT and Gemini (currently not working) integration with free limitation handling
+- Teaching, Personal Assistant, coding modes
+- Agent like gemini for MAC
+- normal chatting mode
 
 ## Files in this repo
 
