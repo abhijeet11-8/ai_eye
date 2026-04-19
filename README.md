@@ -1,4 +1,3 @@
-<img width="506" height="900" alt="Screenshot 2026-04-19 at 5 21 38 PM" src="https://github.com/user-attachments/assets/822ad824-105e-42f0-89bc-f97804ca132a" />
 # AI Eye
 
 AI Eye is a macOS AI overlay that lets you chat, code, and give acess to whatever's on screen to personal assistant AI models from one floating panel. Completely Free!, Helpful for studies and coding tasks.
@@ -11,6 +10,8 @@ Can also use ollama AI modals locally but makes PC slow, suggested to use the ap
 - Coding mode supports `OpenRouter` models and `Groq` for llama-3.3
 - Direct `DeepSeek` support and local `Ollama` support
 - Streaming responses, Markdown rendering, and a draggable bubble UI
+
+<img width="506" height="900" alt="Screenshot 2026-04-19 at 5 21 38 PM" src="https://github.com/user-attachments/assets/822ad824-105e-42f0-89bc-f97804ca132a" />
 
 ## AI models used
 
