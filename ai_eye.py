@@ -684,7 +684,7 @@ textarea::placeholder{color:var(--c2)}
 
 <!-- Messages -->
 <div class="msgs" id="msgs">
-  <div class="row s"><div class="bbl s">Ready — type, speak 🎤, or press <kbd style="font-family:SF Mono,monospace;background:rgba(255,255,255,.08);border-radius:3px;padding:0 4px">Z</kbd> to toggle voice</div></div>
+  <div class="row s"><div class="bbl s">Ready — type, speak 🎤, or press <kbd style="font-family:SF Mono,monospace;background:rgba(255,255,255,.08);border-radius:3px;padding:0 4px">Z</kbd> to toggle voice and <kbd style="font-family:SF Mono,monospace;background:rgba(255,255,255,.08);border-radius:3px;padding:0 4px">X</kbd> to toggle screenshot</div></div>
 </div>
 
 <!-- Input -->
