@@ -96,6 +96,9 @@ If macOS blocks the command file:
 3. Scroll down until you see:
    - `"Launch_AI_Eye.command" was blocked from use because it is not from an identified developer.`
 4. Click **Open Anyway**.
+5. Terminal will run the file and "eye_emoji" chat opens up.
+6. Terminate the terminal and it will run in background.
+7. To quit permanently or maximize: Press `Quit Ai Eye` and `Show / Hide Panel` in  the top bar to minimize click the cross or minimize button on chat.
 
 This is the only way past the dialog without a paid Apple Developer certificate.
 
