@@ -727,7 +727,6 @@ textarea::placeholder{color:var(--c2)}
   <span class="model-label">code model:</span>
   <button class="chip code-on" id="p0" onclick="pickCode('deepseek/deepseek-chat',0)">deepseek</button>
   <button class="chip"         id="p1" onclick="pickCode('amazon/nova-lite-v1',1)">nova-2</button>
-  <button class="chip"         id="p2" onclick="pickCode('mistralai/mistral-7b-instruct:free',2)">mistral</button>
   <button class="chip"         id="p3" onclick="pickCode('meta-llama/llama-3.3-70b-instruct:free',3)">llama-3.3</button>
 </div>
 

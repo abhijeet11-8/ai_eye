@@ -22,24 +22,32 @@ Can integrate with edge AI's but make sPC slow.
 
 ## Setup
 
+To install automatically (recommended), run the installer script:
+```bash
+chmod +x ./install.sh
+```
+
+For manual installation:
+
 1.  **Install dependencies:**
     `pip install -r requirements.txt`
 2.  **Create the config file:**
     ```bash
     cat <<EOF > ~/.ai_eye.json
     {
-      "provider": "groq",
-      "groq_key": "YOUR_GROQ_API_KEY",
-      "groq_model": "llama-3.3-70b-versatile",
-      "groq_vision_model": "llama-3.2-11b-vision-instruct",
-      "gemini_key": "YOUR_GEMINI_KEY",
-      "gemini_model": "gemini-2.0-flash-exp",
-      "ollama_host": "http://localhost:11434",
-      "ollama_model": "llama3.2-vision",
-      "openrouter_key": "YOUR_OPENROUTER_KEY",
-      "openrouter_model": "deepseek/deepseek-chat",
-      "deepseek_key": "YOUR_DEEPSEEK_KEY",
-      "deepseek_model": "deepseek/deepseek-chat"
+    "provider": "groq",
+    "groq_key": "groq-key",
+    "groq_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+    "groq_vision_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+    "gemini_key": "gemini-key",
+    "gemini_model": "gemini-2.0-flash-exp",
+    "ollama_host": "http://localhost:11434",
+    "ollama_model": "llama3.2-vision",
+    "openrouter_key": "openrouter-key",
+    "openrouter_model": "mistralai/mistral-7b-instruct:free",
+    "deepseek_key": "deepseek-key",
+    "deepseek_model": "deepseek/deepseek-chat",
+    "llama3_model": "meta-llama/llama-3.3-70b-versatile"
     }
     EOF
     ```
