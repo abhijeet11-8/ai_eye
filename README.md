@@ -30,7 +30,7 @@ On other screens, press Z to toggle audio to ask question.
 - **Ollama local**: `llama3.2-vision`
 
 ## Setup
-Run it in terminal:
+Open terminal and run it:
 ```bash
 cd Desktop
 git pull https://github.com/abhijeet11-8/ai_eye.git
@@ -74,8 +74,8 @@ For model & app setup:
 3.  **Secure and Edit:**
     `chmod 600 ~/.ai_eye.json && nano ~/.ai_eye.json`
     Get your api keys from here edit the .ai_eye.json file:
-    [groq](https://console.groq.com/keys)
-    [openrouter](https://openrouter.ai/settings/management-keys)
+    [groq](https://console.groq.com/keys),
+    [openrouter](https://openrouter.ai/settings/management-keys),
     [deepseek](https://platform.deepseek.com/api_keys)
 
     To edit run in terminal:
