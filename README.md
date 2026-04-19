@@ -46,6 +46,7 @@ For model & app setup:
     `pip install -r requirements.txt`
 2.  **Create the config file:**
     ```bash
+    cd ai_eye
     cat <<EOF > ~/.ai_eye.json
     {
     "provider": "groq",
