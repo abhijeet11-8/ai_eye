@@ -64,12 +64,12 @@ For model & app setup:
     [openrouter](https://openrouter.ai/settings/management-keys)
     [deepseek](https://platform.deepseek.com/api_keys)
 
-    To edit:
+    To edit run in terminal:
     `nano ~/.ai_eye.json`
 
 ## Running on macOS
 
-If `Launch_AI_Eye.command` does not open directly, use Terminal:
+If `Launch_AI_Eye.command` does not run directly, use Terminal:
 
 ```bash
 chmod +x ~/Desktop/ai_eye/Launch_AI_Eye.command
