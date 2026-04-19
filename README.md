@@ -11,7 +11,7 @@ Can also use ollama AI modals locally but makes PC slow, suggested to use the ap
 - Direct `DeepSeek` support and local `Ollama` support
 - Streaming responses, Markdown rendering, and a draggable bubble UI
 
-<img width="506" height="900" alt="Screenshot 2026-04-19 at 5 21 38 PM" src="https://github.com/user-attachments/assets/822ad824-105e-42f0-89bc-f97804ca132a" />
+<img width="506" height="900" alt="Screenshot 2026-04-19 at 5 21 38 PM" src="https://github.com/user-attachments/assets/822ad824-105e-42f0-89bc-f97804ca132a" /><img width="505" height="900" alt="Screenshot 2026-04-19 at 5 21 25 PM" src="https://github.com/user-attachments/assets/03ce7157-376d-4bed-81a3-62d05fba4fe3" />
 
 ## AI models used
 
