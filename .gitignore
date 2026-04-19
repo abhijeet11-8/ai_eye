@@ -1,0 +1,23 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Local config and API keys
+.ai_eye.json
+
+# Editor directories
+.vscode/
+.idea/
