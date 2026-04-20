@@ -332,11 +332,16 @@ def _groq(cfg, messages, chunk_cb=None, image_b64=None):
     last_user_idx = max((i for i, m in enumerate(messages) if m["role"] == "user"), default=-1)
     for i, m in enumerate(messages):
         if m["role"] == "user" and i == last_user_idx and image_b64:
+            # Send image first, then the text query as a follow-up in the same
+            # turn using two separate content blocks.  Putting the question AFTER
+            # the image means the model reads the query last and treats it as the
+            # instruction to follow, rather than glossing over it while describing
+            # the screenshot.
             msgs.append({
                 "role":    "user",
                 "content": [
-                    {"type": "text",      "text": m["content"]},
                     {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}},
+                    {"type": "text",      "text": f"Here is the screenshot above. Now answer this specific question about it:\n\n{m['content']}"},
                 ]
             })
         else:
@@ -1072,36 +1077,22 @@ class Controller(NSObject):
 
         def _key_handler(event, self=self):
             try:
-                # Only act when the panel is actually visible to the user.
-                # Without the isVisible() guard, every Z/X keystroke in ANY
-                # app triggers evaluateJavaScript on the hidden WKWebView,
-                # which activates macOS's text-input system and causes the
-                # blue system text boxes to flash on screen.
-                # Only act when AI Eye is actually the frontmost app.
-                # If the panel is visible but the user is typing in another
-                # app underneath it, we must NOT call evaluateJavaScript —
-                # doing so can pull keyboard focus toward the WKWebView and
-                # cause blue focus rings to flash on the other app's inputs.
-                # NSApp.isActive() is unreliable for accessory-policy apps.
-                # Instead check isKeyWindow() — True only when the chat panel
-                # itself has keyboard focus, so Z/X in any other app are ignored.
                 if self._minimized or not self._panel.isVisible():
                     return
+
                 key = event.keyCode()
 
-                # Z key → voice
-                if key == 6:
-                    if self._wv:
-                        self._wv.evaluateJavaScript_completionHandler_(
-                            "nativeVoiceToggle()", None
-                        )
-
-                # X key → screenshot toggle
-                elif key == 7:
-                    if self._wv:
-                        self._wv.evaluateJavaScript_completionHandler_(
-                            "toggleSnap()", None
-                        )
+                # Use _push() instead of calling evaluateJavaScript directly.
+                # Calling evaluateJavaScript inside a global key-event callback
+                # makes macOS associate the JS execution with the active keyboard
+                # event, which tickles the text-input system and causes blue focus
+                # boxes to appear on other apps' text fields.
+                # _push() queues the JS so the timer fires it on its own tick,
+                # fully decoupled from the key event — no input-system interference.
+                if key == 6:     # Z → voice toggle
+                    self._push("nativeVoiceToggle()")
+                elif key == 7:   # X → screenshot toggle
+                    self._push("toggleSnap()")
 
             except Exception as e:
                 print("Key error:", e)
