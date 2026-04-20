@@ -997,6 +997,7 @@ class BubblePanel(NSObject):
         panel.setHasShadow_(True)
         panel.setIgnoresMouseEvents_(False)
         panel.setAcceptsMouseMovedEvents_(True)
+        panel.setBecomesKeyOnlyIfNeeded_(True)
 
         drag_view = _BubbleDragView.alloc().initWithFrame_(
             panel.contentView().bounds())
@@ -1071,6 +1072,21 @@ class Controller(NSObject):
 
         def _key_handler(event, self=self):
             try:
+                # Only act when the panel is actually visible to the user.
+                # Without the isVisible() guard, every Z/X keystroke in ANY
+                # app triggers evaluateJavaScript on the hidden WKWebView,
+                # which activates macOS's text-input system and causes the
+                # blue system text boxes to flash on screen.
+                # Only act when AI Eye is actually the frontmost app.
+                # If the panel is visible but the user is typing in another
+                # app underneath it, we must NOT call evaluateJavaScript —
+                # doing so can pull keyboard focus toward the WKWebView and
+                # cause blue focus rings to flash on the other app's inputs.
+                # NSApp.isActive() is unreliable for accessory-policy apps.
+                # Instead check isKeyWindow() — True only when the chat panel
+                # itself has keyboard focus, so Z/X in any other app are ignored.
+                if self._minimized or not self._panel.isVisible():
+                    return
                 key = event.keyCode()
 
                 # Z key → voice
@@ -1096,8 +1112,11 @@ class Controller(NSObject):
         )
         # ─────────────────────────────────────────────────────────
 
+        # 0.04 s (25 Hz) was far too aggressive — causes significant battery
+        # drain by waking the CPU constantly. 0.15 s (~6 Hz) is more than
+        # fast enough for smooth streaming without burning extra power.
         NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
-            0.04, self,
+            0.15, self,
             objc.selector(self.flushJS_, signature=b"v@:@"),
             None, True)
 
@@ -1209,9 +1228,11 @@ class Controller(NSObject):
         self._panel.orderOut_(None)
         self._bubble.move_to(x, y)
         self._bubble.show()
+        NSApp.deactivate()
 
     @objc.python_method
     def restoreFromBubble(self):
+        NSApp.activate()
         self._minimized = False
         self._bubble.hide()
         self._panel.setCollectionBehavior_(1 | 4)
