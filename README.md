@@ -16,7 +16,7 @@ On other screens, press `z` to toggle audio to ask question. and press `x` to ad
 
 | Preview Models | Coding Models |
 | :---: | :---: |
-| <img src="https://github.com/user-attachments/assets/a26218d9-9cf7-4fca-9a57-8b3f5097757f" width="550" height="1200"> | <img src="https://github.com/user-attachments/assets/868c9025-17c6-4cb5-971c-4ea73cee5080" width="550"> |
+| <img src="https://github.com/user-attachments/assets/a26218d9-9cf7-4fca-9a57-8b3f5097757f" width="550" height="1000"> | <img src="https://github.com/user-attachments/assets/868c9025-17c6-4cb5-971c-4ea73cee5080" width="550"> |
 <img src="https://github.com/user-attachments/assets/5997e146-d79a-4d61-b826-2d54c025b5bc" />
 <img src="https://github.com/user-attachments/assets/11ecaa98-1067-44ee-ab5e-2dfc32aecb4e" width="550"> <img src="https://github.com/user-attachments/assets/4cd72260-e741-4ee7-92c0-ccaeee66e20d" width="550">
 
