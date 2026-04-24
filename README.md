@@ -96,7 +96,6 @@ For model & app setup:
     ```bash
     .ai_eye.json
     ```
-    :
     - [Groq](https://console.groq.com/keys)
     - [OpenRouter](https://openrouter.ai/settings/management-keys)
     - [DeepSeek](https://platform.deepseek.com/api_keys)
