@@ -70,7 +70,6 @@ For model & app setup:
     ```
 3.  **Create the config file:**
     ```bash
-    cd ai_eye
     cat <<EOF > ~/.ai_eye.json
     {
       "provider": "groq",
