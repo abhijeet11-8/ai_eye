@@ -88,11 +88,13 @@ For model & app setup:
     }
     EOF
     ```
-4.  **Secure and Edit:**
+    control + o - to save
+    control + x - to close nano
+5.  **Secure and Edit:**
     ```bash
     chmod 600 ~/.ai_eye.json && nano ~/.ai_eye.json
     ```
-    Get your API keys from teh links down below and paste them into:
+    Get your API keys from the links down below and paste them into:
     ```bash
     .ai_eye.json
     ```
@@ -109,7 +111,6 @@ If `Launch_AI_Eye.command` does not run directly, use Terminal:
 
 ```bash
 chmod +x ~/Desktop/ai_eye/Launch_AI_Eye.command
-cd ~/Desktop/ai_eye
 ./Launch_AI_Eye.command
 ```
 
