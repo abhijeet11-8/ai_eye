@@ -43,9 +43,6 @@ cd ai_eye
 ```
 
 To install automatically (recommended), run the installer script:
-```bash 
-brew install portaudio
-```
 if brew not installed:
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
