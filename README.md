@@ -92,7 +92,7 @@ For model & app setup:
     ```bash
     chmod 600 ~/.ai_eye.json && nano ~/.ai_eye.json
     ```
-    Get your API keys here and paste them into
+    Get your API keys from teh links down below and paste them into:
     ```bash
     .ai_eye.json
     ```
