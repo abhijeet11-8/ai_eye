@@ -23,20 +23,18 @@ New in v4:
 import sys, os, json, base64, io, threading, requests, subprocess, wave, tempfile, struct, math, time
 import objc
 import Quartz
-from Foundation import NSObject, NSMakeRect, NSTimer, NSPoint, NSMakePoint
+from Foundation import NSObject, NSMakeRect, NSTimer, NSPoint
 from AppKit import (
     NSApplication, NSApp,
     NSMenu, NSMenuItem,
     NSStatusBar,
-    NSPanel, NSWindow, NSBackingStoreBuffered,
+    NSPanel, NSBackingStoreBuffered,
     NSColor, NSScreen,
     NSVisualEffectView,
-    NSApplicationActivationPolicyAccessory,
+    NSApplicationActivationPolicyAccessory, NSView,
     NSVariableStatusItemLength,
-    NSButton, NSView,
     NSFont, NSEvent,
     NSWindowCollectionBehaviorCanJoinAllSpaces,
-    NSStatusWindowLevel,
     NSWindowCollectionBehaviorFullScreenAuxiliary,
     NSEventMaskKeyDown,
     NSScreenSaverWindowLevel
@@ -66,8 +64,8 @@ _BEHAV_BUBBLE = (
     NSWindowCollectionBehaviorTransient |
     NSWindowCollectionBehaviorIgnoresCycle
 )
-_VE_MAT       = 7
-_VE_BLD       = 0
+_VE_MAT       = 9
+_VE_BLD       = 1
 _VE_STA       = 1
 _AUTORESZ     = 18
 _BUBBLE_W     = 60
@@ -684,13 +682,27 @@ textarea::placeholder{color:var(--c2)}
 
 <!-- Screenshot banner -->
 <div class="snap-banner" id="snapBanner">
-  <span>📷 Screenshot attached</span>
+  <span>📷 Screen visible</span>
   <button onclick="toggleSnap()">✕</button>
 </div>
 
 <!-- Messages -->
 <div class="msgs" id="msgs">
-  <div class="row s"><div class="bbl s">Ready — type, speak 🎤, or press <kbd style="font-family:SF Mono,monospace;background:rgba(255,255,255,.08);border-radius:3px;padding:0 4px">Z</kbd> to toggle voice and <kbd style="font-family:SF Mono,monospace;background:rgba(255,255,255,.08);border-radius:3px;padding:0 4px">X</kbd> to toggle screenshot</div></div>
+  <div class="row s">
+  <div class="bbl s">
+    <ul style="margin:0;padding-left:14px;list-style-type:disc;">
+      <li>
+        <kbd style="font-family:SF Mono,monospace;background:rgba(255,255,255,.08);border-radius:3px;padding:0 4px">Option + Z</kbd> to toggle voice
+      </li>
+      <li>
+        <kbd style="font-family:SF Mono,monospace;background:rgba(255,255,255,.08);border-radius:3px;padding:0 4px">Option + X</kbd> to toggle screen
+      </li>
+      <li>
+        <kbd style="font-family:SF Mono,monospace;background:rgba(255,255,255,.08);border-radius:3px;padding:0 4px">Option + A</kbd> to minimize
+      </li>
+    </ul>
+  </div>
+</div>
 </div>
 
 <!-- Input -->
@@ -1078,16 +1090,12 @@ class Controller(NSObject):
 
         def _key_handler(event, self=self):
             try:
-                if self._minimized or not self._panel.isVisible():
-                    return event
-
                 key = event.keyCode()
                 flags = event.modifierFlags()
 
                 # Required modifiers: Command + Shift
                 REQUIRED = (
-                    Quartz.kCGEventFlagMaskCommand |
-                    Quartz.kCGEventFlagMaskShift
+                    Quartz.kCGEventFlagMaskAlternate
                 )
 
                 # Only trigger when EXACT combo is pressed
@@ -1099,6 +1107,11 @@ class Controller(NSObject):
                     self._push("nativeVoiceToggle()")
                 elif key == 7:  # X
                     self._push("toggleSnap()")
+                elif key == 0:  # A
+                    if self._panel.isVisible():
+                        self.minimizeToBubble()
+                    elif self._minimized:
+                        self.restoreFromBubble()
 
                 return None  # consume event (important)
 
@@ -1109,6 +1122,40 @@ class Controller(NSObject):
         self._key_monitor = NSEvent.addGlobalMonitorForEventsMatchingMask_handler_(
             NSEventMaskKeyDown,
             _key_handler
+        )
+
+        # Local monitor (NEW — works when panel is focused)
+        def _local_key_handler(event):
+            try:
+                key = event.keyCode()
+                flags = event.modifierFlags()
+
+                REQUIRED = Quartz.kCGEventFlagMaskAlternate  # Option key
+
+                if (flags & REQUIRED) != REQUIRED:
+                    return event
+
+                if key == 6:  # Z
+                    self._push("nativeVoiceToggle()")
+                    return None
+
+                elif key == 7:  # X
+                    self._push("toggleSnap()")
+                    return None
+
+                elif key == 0:  # A
+                    self._push("minimize()")
+                    return None
+
+                return event
+
+            except Exception as e:
+                print("Local key error:", e)
+                return event
+
+        self._local_key_monitor = NSEvent.addLocalMonitorForEventsMatchingMask_handler_(
+            NSEventMaskKeyDown,
+            _local_key_handler
         )
         # ─────────────────────────────────────────────────────────
 
@@ -1163,9 +1210,12 @@ class Controller(NSObject):
     def _build_panel(self):
         fr     = NSScreen.mainScreen().frame()
         sw, sh = fr.size.width, fr.size.height
-        w, h   = 360, min(680, int(sh) - 80)
-        x      = int(sw) - w - 12
-        y      = (int(sh) - h) // 2
+        screen = NSScreen.mainScreen().visibleFrame()
+
+        w, h = 270, int(screen.size.height)-48
+
+        x = screen.origin.x + screen.size.width - w   # ✅ perfect right edge
+        y = screen.origin.y                           # ✅ perfect bottom edge
 
         panel = NSPanel.alloc().initWithContentRect_styleMask_backing_defer_(
             NSMakeRect(x, y, w, h), _STYLE_PANEL, NSBackingStoreBuffered, False)
@@ -1228,7 +1278,14 @@ class Controller(NSObject):
         self._panel.orderOut_(None)
         self._bubble.move_to(x, y)
         self._bubble.show()
-        NSApp.deactivate()
+        _run_apple('''
+        tell application "System Events"
+            set frontApps to (every process whose frontmost is true and name is not "Python" and name is not "python3")
+            if (count of frontApps) > 0 then
+                set frontmost of item 1 of frontApps to true
+            end if
+        end tell
+        ''')
 
     @objc.python_method
     def restoreFromBubble(self):
@@ -1360,6 +1417,10 @@ class Controller(NSObject):
             image_b64 = capture_b64()
             if image_b64 is None:
                 self._push("recvErr('Screen capture failed — grant Screen Recording in System Settings')")
+                subprocess.run([
+                            "open",
+                            "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"
+                            ])
                 return
 
         active_cfg = dict(self._cfg)
@@ -1374,21 +1435,21 @@ class Controller(NSObject):
                     active_cfg["openrouter_model"] = coding_model
             sys_msg = (
                 "You are an expert coding assistant. "
-                "Write clean, well-commented code. "
+                "Write clean and precise, well-commented code. "
                 "Always use markdown fenced code blocks with the language tag."
             )
         elif image_b64:
             active_cfg["provider"] = "groq"
             if not active_cfg.get("groq_vision_model"):
                 active_cfg["groq_vision_model"] = "meta-llama/llama-4-scout-17b-16e-instruct"
-            sys_msg = "The user has shared a screenshot — analyse it carefully and answer their question."
+            sys_msg = "The user has shared a screenshot — analyse it carefully and answer their question precisely and in brief unless required."
         else:
             if active_cfg.get("provider") == "deepseek":
                 active_cfg["provider"]         = "openrouter"
                 active_cfg["openrouter_model"] = active_cfg.get("deepseek_model", "deepseek/deepseek-chat")
             sys_msg = (
                 "You are a concise AI assistant in a floating overlay on macOS. "
-                "Be helpful and brief."
+                "Be helpful and brief and concise unless required."
             )
 
         msgs = [{"role": "system", "content": sys_msg}]

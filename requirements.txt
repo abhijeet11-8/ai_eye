@@ -1,3 +1,4 @@
+pyobjc-core>=9.0
 pyobjc-framework-Cocoa>=9.0
 pyobjc-framework-WebKit>=9.0
 requests>=2.31.0
