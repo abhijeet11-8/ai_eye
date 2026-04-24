@@ -89,8 +89,14 @@ For model & app setup:
     EOF
     ```
 4.  **Secure and Edit:**
-    `chmod 600 ~/.ai_eye.json && nano ~/.ai_eye.json`
-    Get your API keys here and paste them into `.ai_eye.json`:
+    ```bash
+    chmod 600 ~/.ai_eye.json && nano ~/.ai_eye.json
+    ```
+    Get your API keys here and paste them into
+    ```bash
+    .ai_eye.json
+    ```
+    :
     - [Groq](https://console.groq.com/keys)
     - [OpenRouter](https://openrouter.ai/settings/management-keys)
     - [DeepSeek](https://platform.deepseek.com/api_keys)
