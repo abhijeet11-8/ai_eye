@@ -22,6 +22,7 @@ New in v4:
 
 import sys, os, json, base64, io, threading, requests, subprocess, wave, tempfile, struct, math, time
 import objc
+import Quartz
 from Foundation import NSObject, NSMakeRect, NSTimer, NSPoint, NSMakePoint
 from AppKit import (
     NSApplication, NSApp,
@@ -1078,24 +1079,32 @@ class Controller(NSObject):
         def _key_handler(event, self=self):
             try:
                 if self._minimized or not self._panel.isVisible():
-                    return
+                    return event
 
                 key = event.keyCode()
+                flags = event.modifierFlags()
 
-                # Use _push() instead of calling evaluateJavaScript directly.
-                # Calling evaluateJavaScript inside a global key-event callback
-                # makes macOS associate the JS execution with the active keyboard
-                # event, which tickles the text-input system and causes blue focus
-                # boxes to appear on other apps' text fields.
-                # _push() queues the JS so the timer fires it on its own tick,
-                # fully decoupled from the key event — no input-system interference.
-                if key == 6:     # Z → voice toggle
+                # Required modifiers: Command + Shift
+                REQUIRED = (
+                    Quartz.kCGEventFlagMaskCommand |
+                    Quartz.kCGEventFlagMaskShift
+                )
+
+                # Only trigger when EXACT combo is pressed
+                if (flags & REQUIRED) != REQUIRED:
+                    return event
+
+                # Now check key
+                if key == 6:  # Z
                     self._push("nativeVoiceToggle()")
-                elif key == 7:   # X → screenshot toggle
+                elif key == 7:  # X
                     self._push("toggleSnap()")
+
+                return None  # consume event (important)
 
             except Exception as e:
                 print("Key error:", e)
+                return event
 
         self._key_monitor = NSEvent.addGlobalMonitorForEventsMatchingMask_handler_(
             NSEventMaskKeyDown,
