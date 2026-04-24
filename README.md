@@ -39,27 +39,39 @@ Open terminal and run it:
 ```bash
 cd Desktop
 git pull https://github.com/abhijeet11-8/ai_eye.git
+cd ai_eye
 ```
 
 To install automatically (recommended), run the installer script:
-```bash
-./install.sh
+```bash 
+brew install portaudio
 ```
-or, if you need to make it executable first:
+if brew not installed:
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+then,
+```bash
+brew install portaudio
+```
+
+you need to make install.sh executable first:
 ```bash
 chmod +x ./install.sh
+```
+then,
+```bash
+./install.sh
 ```
 Here you can download Ollama and any of its local models to run locally, or just type y/n to skip.
 
 For model & app setup:
 
 1.  **Install dependencies:**
-    `pip install -r requirements.txt`
-    then,
-    `brew install portaudio`
-    if brew not installed:
-    `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-2.  **Create the config file:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  **Create the config file:**
     ```bash
     cd ai_eye
     cat <<EOF > ~/.ai_eye.json
@@ -80,7 +92,7 @@ For model & app setup:
     }
     EOF
     ```
-3.  **Secure and Edit:**
+4.  **Secure and Edit:**
     `chmod 600 ~/.ai_eye.json && nano ~/.ai_eye.json`
     Get your API keys here and paste them into `.ai_eye.json`:
     - [Groq](https://console.groq.com/keys)
