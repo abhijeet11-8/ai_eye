@@ -1,14 +1,16 @@
 # AI Eye
 
-AI Eye is a macOS AI overlay that lets you chat, code, and give acess to whatever's on screen to personal assistant AI models from one floating panel. Completely Free! and Unlimited! tokan limit, Helpful for studies and coding tasks.
-Can also use ollama AI modals locally but makes PC slow, suggested to use the api-keys.
+AI Eye is a macOS AI overlay that lets you chat, code, and give access to whatever's on screen to personal assistant AI models from one floating panel. Completely Free! and Unlimited! token limit. Helpful for studies and coding tasks.
+Can also use Ollama AI models locally but makes PC slow, suggested to use the API keys.
 
-On other screens, press `z` to toggle audio to ask question. and press `x` to add screenshot.
+On other screens, press `z` to toggle audio to ask a question, and press `x` to add a screenshot.
 
 ## What it does
 
-- Screenshot questions route to `Groq` vision
-- Text chat routes to `Groq` llama-3.3-70b-versatile by default
+- Screenshot questions route to `Groq` vision (`llama-4-scout`)
+- Text chat routes to `Groq` llama-4-scout by default
+- Voice input via `z` key — records speech, transcribes with **Groq Whisper-large-v3**, and sends to the selected model automatically
+- Voice works with screenshot mode (attaches the screenshot + your transcribed question)
 - Coding mode supports `OpenRouter` models and `Groq` for llama-3.3
 - Direct `DeepSeek` support and local `Ollama` support
 - Streaming responses, Markdown rendering, and a draggable bubble UI
@@ -24,8 +26,9 @@ On other screens, press `z` to toggle audio to ask question. and press `x` to ad
 
 ## AI models used
 
-- **Groq text**: `llama-3.3-70b-versatile`
-- **Groq vision**: `llama-3.2-11b-vision-instruct`
+- **Groq text**: `meta-llama/llama-4-scout-17b-16e-instruct`
+- **Groq vision**: `meta-llama/llama-4-scout-17b-16e-instruct`
+- **Groq STT**: `whisper-large-v3`
 - **Gemini**: `gemini-2.0-flash-exp` and optional `gemini-1.5-flash` (yet not working due to billing issues)
 - **OpenRouter coding**: `deepseek/deepseek-chat`, `amazon/nova-lite-v1`, `mistralai/mistral-7b-instruct:free`, `meta-llama/llama-3.3-70b-instruct:free`
 - **DeepSeek direct**: `deepseek/deepseek-chat`
@@ -42,11 +45,11 @@ To install automatically (recommended), run the installer script:
 ```bash
 ./install.sh
 ```
-or,
+or, if you need to make it executable first:
 ```bash
 chmod +x ./install.sh
 ```
-here you can download Ollama and any of its local models to run it locally or just type y/n.
+Here you can download Ollama and any of its local models to run locally, or just type y/n to skip.
 
 For model & app setup:
 
@@ -54,37 +57,37 @@ For model & app setup:
     `pip install -r requirements.txt`
     then,
     `brew install portaudio`
-    if brew not installed,
+    if brew not installed:
     `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 2.  **Create the config file:**
     ```bash
     cd ai_eye
     cat <<EOF > ~/.ai_eye.json
     {
-    "provider": "groq",
-    "groq_key": "groq-key",
-    "groq_model": "meta-llama/llama-4-scout-17b-16e-instruct",
-    "groq_vision_model": "meta-llama/llama-4-scout-17b-16e-instruct",
-    "gemini_key": "gemini-key",
-    "gemini_model": "gemini-2.0-flash-exp",
-    "ollama_host": "http://localhost:11434",
-    "ollama_model": "llama3.2-vision",
-    "openrouter_key": "openrouter-key",
-    "openrouter_model": "mistralai/mistral-7b-instruct:free",
-    "deepseek_key": "deepseek-key",
-    "deepseek_model": "deepseek/deepseek-chat",
-    "llama3_model": "meta-llama/llama-3.3-70b-versatile"
+      "provider": "groq",
+      "groq_key": "groq-key",
+      "groq_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "groq_vision_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "groq_whisper_model": "whisper-large-v3",
+      "gemini_key": "gemini-key",
+      "gemini_model": "gemini-2.0-flash-exp",
+      "ollama_host": "http://localhost:11434",
+      "ollama_model": "llama3.2-vision",
+      "openrouter_key": "openrouter-key",
+      "openrouter_model": "deepseek/deepseek-chat",
+      "deepseek_key": "deepseek-key",
+      "deepseek_model": "deepseek/deepseek-chat"
     }
     EOF
     ```
 3.  **Secure and Edit:**
     `chmod 600 ~/.ai_eye.json && nano ~/.ai_eye.json`
-    Get your api keys from here edit the .ai_eye.json file:
-    [groq](https://console.groq.com/keys),
-    [openrouter](https://openrouter.ai/settings/management-keys),
-    [deepseek](https://platform.deepseek.com/api_keys)
+    Get your API keys here and paste them into `.ai_eye.json`:
+    - [Groq](https://console.groq.com/keys)
+    - [OpenRouter](https://openrouter.ai/settings/management-keys)
+    - [DeepSeek](https://platform.deepseek.com/api_keys)
 
-    To edit run in terminal:
+    To edit later, run in terminal:
     `nano ~/.ai_eye.json`
 
 ## Running on macOS
@@ -104,9 +107,9 @@ If macOS blocks the command file:
 3. Scroll down until you see:
    - `"Launch_AI_Eye.command" was blocked from use because it is not from an identified developer.`
 4. Click **Open Anyway**.
-5. Terminal will run the file and "eye_emoji" chat opens up.
-6. Terminate the terminal and it will run in background.
-7. To quit permanently or maximize: Press `Quit Ai Eye` and `Show / Hide Panel` in  the top bar to minimize click the cross or minimize button on chat.
+5. Terminal will run the file and the "eye_emoji" chat opens up.
+6. Terminate the terminal window and it will run in the background.
+7. To quit permanently: Press `Quit AI Eye` in the top bar. To show/hide the panel: Press `Show / Hide Panel`. To minimize to bubble: click the close or minimize button on the chat.
 
 This is the only way past the dialog without a paid Apple Developer certificate.
 
@@ -124,13 +127,13 @@ This is the only way past the dialog without a paid Apple Developer certificate.
 - Questions generator
 - Windows support
 - ChatGPT and Gemini (currently not working) integration with free limitation handling
-- Teaching, Personal Assistant, coding modes
-- Agent like gemini for MAC
-- normal chatting mode
+- Teaching, Personal Assistant, and coding modes
+- Agent-like Gemini for Mac
+- Normal chatting mode
 
 ## Files in this repo
 
-- `ai_eye.py` — main macOS overlay app
+- `ai_eye.py` — main macOS overlay app (v4)
 - `Launch_AI_Eye.command` — launcher script for macOS
 - `install.sh` — installer helper
 - `requirements.txt` — Python dependencies

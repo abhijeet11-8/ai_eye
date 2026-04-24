@@ -1,6 +1,12 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
+# ── Check that the virtual environment exists ─────────────────────
+if [ ! -f ".venv/bin/python" ]; then
+    osascript -e 'display alert "AI Eye — Setup required" message "Virtual environment not found.\n\nPlease run the installer first:\n\n  cd ~/Desktop/ai_eye\n  ./install.sh" as critical'
+    exit 1
+fi
+
 # Kill any existing AI Eye instance first (clean restart)
 pkill -f "python.*ai_eye.py" 2>/dev/null || true
 sleep 0.3
